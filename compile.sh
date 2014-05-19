@@ -20,10 +20,15 @@
 	MSL="${MSL_DIR}/2d.cpp ${MSL_DIR}/2d_util.cpp \
 		${MSL_DIR}/glut_input.cpp ${MSL_DIR}/glut_ui.cpp \
 		${MSL_DIR}/socket.cpp ${MSL_DIR}/socket_util.cpp \
-		${MSL_DIR}/string_util.cpp ${MSL_DIR}/time_util.cpp"
+		${MSL_DIR}/sprite.cpp ${MSL_DIR}/string_util.cpp \
+		${MSL_DIR}/time_util.cpp"
+
+	#SOIL
+	SOIL_DIR="SOIL"
+	SOIL="${SOIL_DIR}/stb_image_aug.c ${SOIL_DIR}/SOIL.c"
 
 	#Full Source
-	SRC="${HAGGARD} ${MSL} ${FALCONER}"
+	SRC="${FALCONER} ${HAGGARD} ${MSL} ${SOIL}"
 
 #Libraries
 	#GL
