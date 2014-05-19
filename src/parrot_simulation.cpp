@@ -2,8 +2,9 @@
 
 #include <msl/2d_util.hpp>
 
-parrot_simulation::parrot_simulation():flying(false),emergency(false),battery(0.0),
-	x(0),y(0),dir(0),prop_rotation(0),prop_rotation_speed(0),
+parrot_simulation::parrot_simulation():flying(false),emergency(false),
+	low_battery(false),bad_motor(false),battery(0.0),x(0),y(0),dir(0),
+	prop_rotation(0),prop_rotation_speed(0),
 	prop_rotation_speed_inc(200),prop_rotation_speed_max(60)
 {}
 
@@ -32,6 +33,7 @@ void parrot_simulation::loop(const double dt)
 }
 
 void parrot_simulation::draw(const msl::sprite& body,const msl::sprite& prop,
+	const msl::sprite& batt,const msl::sprite& motor,
 	const msl::sprite& led,const double scale)
 {
 	//LED Color
@@ -79,8 +81,14 @@ void parrot_simulation::draw(const msl::sprite& body,const msl::sprite& prop,
 	double batt_w=64*scale;
 	double batt_h=16*scale;
 	double batt_x=x-batt_w/2.0;
-	double batt_y=y-batt_h/2.0;;
+	double batt_y=y+batt_h/2.0;
 	msl::draw_rectangle(batt_x,batt_y,batt_w,batt_h,true,msl::color(0.4,0.4,0.4,1));
 	msl::draw_rectangle(batt_x,batt_y,batt_w*batt_v,batt_h,true,msl::color(1-batt_v,batt_v,0,1));
 	msl::draw_rectangle(batt_x,batt_y,batt_w,batt_h,false,msl::color(0,0,0,1));
+
+	//Draw Error Icons
+	if(low_battery)
+		batt.draw(x,y+batt_h+batt.height()*scale/2.0,0,0,scale,scale);
+	if(bad_motor)
+		motor.draw(x,y-batt_h-motor.height()*scale/2.0,0,0,scale,scale);
 }

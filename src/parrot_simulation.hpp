@@ -10,6 +10,8 @@ class parrot_simulation
 	public:
 		bool flying;
 		bool emergency;
+		bool low_battery;
+		bool bad_motor;
 		double battery;
 		double x;
 		double y;
@@ -22,6 +24,7 @@ class parrot_simulation
 		void loop(const double dt);
 
 		void draw(const msl::sprite& body,const msl::sprite& prop,
+			const msl::sprite& batt,const msl::sprite& motor,
 			const msl::sprite& led,const double scale=1.0);
 
 	private:

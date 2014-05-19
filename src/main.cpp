@@ -117,6 +117,8 @@ void loop(const double dt)
 	//Update Parrot Simulation
 	parrot_sim.flying=a.flying();
 	parrot_sim.emergency=a.emergency_mode();
+	parrot_sim.low_battery=a.low_battery();
+	parrot_sim.bad_motor=!a.motors_good();
 	parrot_sim.battery=a.battery_percent();
 	parrot_sim.dir=-a.yaw();
 	parrot_sim.loop(dt);
@@ -132,7 +134,9 @@ void draw()
 	static msl::sprite spr_parrot("images/parrot.png");
 	static msl::sprite spr_prop("images/prop_ccw.png");
 	static msl::sprite spr_led("images/led.png");
+	static msl::sprite spr_low_battery("images/battery.png");
+	static msl::sprite spr_bad_motor("images/engine.png");
 
 	//Draw Parrot Simulation
-	parrot_sim.draw(spr_parrot,spr_prop,spr_led,0.5);
+	parrot_sim.draw(spr_parrot,spr_prop,spr_low_battery,spr_bad_motor,spr_led,0.5);
 }
