@@ -3,7 +3,7 @@
 #include <msl/2d_util.hpp>
 
 parrot_simulation::parrot_simulation():flying(false),emergency(false),battery(0.0),
-	prop_rotation(0),prop_rotation_speed(0),
+	x(0),y(0),dir(0),prop_rotation(0),prop_rotation_speed(0),
 	prop_rotation_speed_inc(200),prop_rotation_speed_max(60)
 {}
 
@@ -31,8 +31,8 @@ void parrot_simulation::loop(const double dt)
 	}
 }
 
-void parrot_simulation::draw(const msl::sprite& body,const msl::sprite& prop,const msl::sprite& led,
-	const double x,const double y,const double scale)
+void parrot_simulation::draw(const msl::sprite& body,const msl::sprite& prop,
+	const msl::sprite& led,const double scale)
 {
 	//LED Color
 	msl::color led_color(0,1,0,1);
@@ -41,24 +41,30 @@ void parrot_simulation::draw(const msl::sprite& body,const msl::sprite& prop,con
 		led_color=msl::color(1,0.3,0,1);
 
 	//Prop Locations
-	double xoff=100*scale;
-	double yoff_top=76*scale;
-	double yoff_bot=124*scale;
+	double x_len=100*scale;
+	double y_len_top=76*scale;
+	double y_len_bot=124*scale;
+	double len_top=msl::point_distance(0,0,x_len,y_len_top);
+	double len_bot=msl::point_distance(0,0,x_len,y_len_bot);
+	double dir_tl=dir*M_PI/180.0+atan2(y_len_top,-x_len);
+	double dir_tr=dir*M_PI/180.0+atan2(y_len_top,x_len);
+	double dir_br=(dir+180)*M_PI/180.0+atan2(y_len_bot,-x_len);
+	double dir_bl=(dir+180)*M_PI/180.0+atan2(y_len_bot,x_len);
 
 	//Draw LEDs
-	led.draw(x-xoff,y+yoff_top,-prop_rotation+10,0,-scale,scale,led_color);
-	led.draw(x+xoff,y+yoff_top,prop_rotation+35,0,scale,scale,led_color);
-	led.draw(x+xoff,y-yoff_bot,-prop_rotation+90,0,-scale,scale,led_color);
-	led.draw(x-xoff,y-yoff_bot,prop_rotation+120,0,scale,scale,led_color);
+	led.draw(x+cos(dir_tl)*len_top,y+sin(dir_tl)*len_top,dir-prop_rotation,0,scale,scale,led_color);
+	led.draw(x+cos(dir_tr)*len_top,y+sin(dir_tr)*len_top,dir-prop_rotation,0,scale,scale,led_color);
+	led.draw(x+cos(dir_br)*len_bot,y+sin(dir_br)*len_bot,dir-prop_rotation,0,scale,scale,led_color);
+	led.draw(x+cos(dir_bl)*len_bot,y+sin(dir_bl)*len_bot,dir-prop_rotation,0,scale,scale,led_color);
 
 	//Draw Parrot
-	body.draw(x,y,0,0,scale,scale);
+	body.draw(x,y,dir,0,scale,scale);
 
 	//Draw Props
-	prop.draw(x-xoff,y+yoff_top,-prop_rotation+10,0,-scale,scale);
-	prop.draw(x+xoff,y+yoff_top,prop_rotation+35,0,scale,scale);
-	prop.draw(x+xoff,y-yoff_bot,-prop_rotation+90,0,-scale,scale);
-	prop.draw(x-xoff,y-yoff_bot,prop_rotation+120,0,scale,scale);
+	prop.draw(x+cos(dir_tl)*len_top,y+sin(dir_tl)*len_top,dir-prop_rotation+45,0,-scale,scale,led_color);
+	prop.draw(x+cos(dir_tr)*len_top,y+sin(dir_tr)*len_top,dir-prop_rotation-45,0,scale,scale,led_color);
+	prop.draw(x+cos(dir_br)*len_bot,y+sin(dir_br)*len_bot,dir-prop_rotation-45,0,scale,scale,led_color);
+	prop.draw(x+cos(dir_bl)*len_bot,y+sin(dir_bl)*len_bot,dir-prop_rotation+45,0,-scale,scale,led_color);
 
 	//Draw Battery Meter
 	double batt_v=battery/100.0;

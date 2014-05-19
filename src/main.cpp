@@ -118,6 +118,7 @@ void loop(const double dt)
 	parrot_sim.flying=a.flying();
 	parrot_sim.emergency=a.emergency_mode();
 	parrot_sim.battery=a.battery_percent();
+	parrot_sim.dir=a.yaw();
 	parrot_sim.loop(dt);
 
 	//Maneuver Parrot
@@ -133,5 +134,5 @@ void draw()
 	static msl::sprite spr_led("images/led.png");
 
 	//Draw Parrot Simulation
-	parrot_sim.draw(spr_parrot,spr_prop,spr_led,0,0,0.5);
+	parrot_sim.draw(spr_parrot,spr_prop,spr_led,0.5);
 }
