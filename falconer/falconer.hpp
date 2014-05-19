@@ -44,7 +44,7 @@ class ardrone
 		void land();
 		void emergency_mode_toggle();
 		void takeoff();
-		void manuever(const float altitude,const float pitch,const float roll,const float yaw);
+		void manuever(float altitude,float pitch,float roll,float yaw);
 		void hover();
 
 		void set_level();

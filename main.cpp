@@ -17,6 +17,7 @@
 #include <falconer/falconer.hpp>
 
 ardrone a;
+bool auto_pilot=false;
 
 int main()
 {
@@ -59,41 +60,34 @@ void loop(const double dt)
 	if(msl::input_check_pressed(kb_r))
 		a.emergency_mode_toggle();
 
-	if(msl::input_check_pressed(kb_1))
-		a.set_video_feed_front();
-
-	if(msl::input_check_pressed(kb_2))
-		a.set_video_feed_bottom();
-
-	if(msl::input_check(kb_w))
-		pitch=-speed;
-
-	if(msl::input_check(kb_s))
-		pitch=speed;
-
-	if(msl::input_check(kb_a))
-		roll=-speed;
-
-	if(msl::input_check(kb_d))
-		roll=speed;
-
-	if(msl::input_check(kb_q))
-		yaw=-speed;
-
-	if(msl::input_check(kb_e))
-		yaw=speed;
-
-	if(msl::input_check(kb_up))
-		altitude=speed;
-
-	if(msl::input_check(kb_down))
-		altitude=-speed;
-
 	if(msl::input_check_pressed(kb_t))
 		a.takeoff();
 
 	if(msl::input_check_pressed(kb_space))
 		a.land();
+
+	if(auto_pilot)
+	{
+	}
+	else
+	{
+		if(msl::input_check(kb_w))
+			pitch=-speed;
+		if(msl::input_check(kb_s))
+			pitch=speed;
+		if(msl::input_check(kb_a))
+			roll=-speed;
+		if(msl::input_check(kb_d))
+			roll=speed;
+		if(msl::input_check(kb_q))
+			yaw=-speed;
+		if(msl::input_check(kb_e))
+			yaw=speed;
+		if(msl::input_check(kb_up))
+			altitude=speed;
+		if(msl::input_check(kb_down))
+			altitude=-speed;
+	}
 
 	a.manuever(altitude,pitch,roll,yaw);
 }

@@ -10,6 +10,9 @@
 //Definitions for "falconer.hpp"
 #include "falconer.hpp"
 
+//Algorithm Header
+#include <algorithm>
+
 //Exceptions Header
 #include <stdexcept>
 
@@ -345,10 +348,15 @@ void ardrone::takeoff()
 	}
 }
 
-void ardrone::manuever(const float altitude,const float pitch,const float roll,const float yaw)
+void ardrone::manuever(float altitude,float pitch,float roll,float yaw)
 {
 	if(good())
 	{
+		altitude=std::max((float)-1.0,std::min((float)1.0,altitude));
+		pitch=std::max((float)-1.0,std::min((float)1.0,pitch));
+		roll=std::max((float)-1.0,std::min((float)1.0,roll));
+		yaw=std::max((float)-1.0,std::min((float)1.0,yaw));
+
 		std::string command="AT*PCMD="+msl::to_string(_count)+",1,"+msl::to_string(*(int*)(&roll))+","+msl::to_string(*(int*)(&pitch))
 			+","+msl::to_string(*(int*)(&altitude))+","+msl::to_string(*(int*)(&yaw))+"\r";
 		++_count;
