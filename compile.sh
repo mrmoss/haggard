@@ -1,15 +1,56 @@
-#!/bin/sh
-MSL_DIR=msl
-MSL="${MSL_DIR}/2d.cpp ${MSL_DIR}/2d_util.cpp \
-	${MSL_DIR}/glut_input.cpp ${MSL_DIR}/glut_ui.cpp \
-	${MSL_DIR}/socket.cpp ${MSL_DIR}/socket_util.cpp \
-	${MSL_DIR}/string_util.cpp ${MSL_DIR}/time_util.cpp"
+#!/bin/bash
 
-FALCONER_DIR="falconer"
-FALCONER="${FALCONER_DIR}/falconer.cpp"
+#Housework
+	#Get OS
+	OS='uname -s'
 
-LIB="-lGL -lglut -lGLEW -lSOIL -lftgl"
+#Compiler
+	COMPILER="g++"
 
-DIRS="-I. -I/usr/include/freetype2"
+#Sources
+	#Falconer
+	FALCONER_DIR="falconer"
+	FALCONER="${FALCONER_DIR}/falconer.cpp"
 
-g++ main.cpp ${MSL} ${FALCONER} ${DIRS} -o haggard -O -Wall ${LIB}
+	#Haggard
+	HAGGARD="main.cpp"
+
+	#MSL
+	MSL_DIR="msl"
+	MSL="${MSL_DIR}/2d.cpp ${MSL_DIR}/2d_util.cpp \
+		${MSL_DIR}/glut_input.cpp ${MSL_DIR}/glut_ui.cpp \
+		${MSL_DIR}/socket.cpp ${MSL_DIR}/socket_util.cpp \
+		${MSL_DIR}/string_util.cpp ${MSL_DIR}/time_util.cpp"
+
+	#Full Source
+	SRC="${HAGGARD} ${MSL} ${FALCONER}"
+
+#Libraries
+	#GL
+	if [ "${OS}" == "Darwin" ]
+	then
+		OS_GL="-framework OpenGL -framework Glew -framework GLUT"
+	else
+		OS_GL="-lGL -lglut -lGLEW"
+	fi
+
+	#OpenCV
+	OPENCV="-lopencv_core -lopencv_highgui -lopencv_features2d -lopencv_imgproc -lopencv_video"
+
+	#PThread
+	PTHREAD="-lpthread"
+
+	#Full Libraries
+	LIB="-lftgl ${OS_GL} ${OPENCV} ${PTHREAD}"
+
+#Binary Name
+	BIN="-o haggard"
+
+#Compiler Flags
+	CFLAGS="-O -Wall"
+
+#Search Directories
+	DIRS="-I. -I/usr/local/include -L/usr/local/lib -I/usr/include/freetype2"
+
+#Compile
+${COMPILER} ${SRC} ${LIB} ${BIN} ${CFLAGS} ${DIRS}
