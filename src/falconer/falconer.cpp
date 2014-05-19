@@ -231,6 +231,9 @@ void ardrone::navdata_update()
 {
 	if(good())
 	{
+		char redirect_navdata_command[14]={1,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		_navdata_socket.write(redirect_navdata_command,14);
+
 		const int packet_size=500;			//nav-data-full packet size=500, nav-data-demo packet size=24
 		uint8_t byte[packet_size];
 
