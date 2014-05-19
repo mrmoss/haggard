@@ -136,6 +136,7 @@ void draw()
 	static msl::sprite spr_led("images/led.png");
 	static msl::sprite spr_low_battery("images/battery.png");
 	static msl::sprite spr_bad_motor("images/engine.png");
+	spr_parrot.set_origin(0,-12);
 
 	//Draw Parrot Simulation
 	parrot_sim.draw(spr_parrot,spr_prop,spr_low_battery,spr_bad_motor,spr_led,0.5);
