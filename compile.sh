@@ -9,14 +9,14 @@
 
 #Sources
 	#Falconer
-	FALCONER_DIR="falconer"
+	FALCONER_DIR="src/falconer"
 	FALCONER="${FALCONER_DIR}/falconer.cpp"
 
 	#Haggard
-	HAGGARD="main.cpp"
+	HAGGARD="src/main.cpp src/parrot_simulation.cpp"
 
 	#MSL
-	MSL_DIR="msl"
+	MSL_DIR="src/msl"
 	MSL="${MSL_DIR}/2d.cpp ${MSL_DIR}/2d_util.cpp \
 		${MSL_DIR}/glut_input.cpp ${MSL_DIR}/glut_ui.cpp \
 		${MSL_DIR}/socket.cpp ${MSL_DIR}/socket_util.cpp \
@@ -24,7 +24,7 @@
 		${MSL_DIR}/time_util.cpp"
 
 	#SOIL
-	SOIL_DIR="SOIL"
+	SOIL_DIR="src/SOIL"
 	SOIL="${SOIL_DIR}/stb_image_aug.c ${SOIL_DIR}/SOIL.c"
 
 	#Full Source
@@ -55,7 +55,7 @@
 	CFLAGS="-O -Wall"
 
 #Search Directories
-	DIRS="-I. -I/usr/local/include -L/usr/local/lib -I/usr/include/freetype2"
+	DIRS="-I./src -I/usr/local/include -L/usr/local/lib -I/usr/include/freetype2"
 
 #Compile
 ${COMPILER} ${SRC} ${LIB} ${BIN} ${CFLAGS} ${DIRS}
