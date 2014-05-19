@@ -1,6 +1,6 @@
 //Haggard Source
 //	Created By:		Mike Moss and Ann Tupek
-//	Modified On:	05/18/2014
+//	Modified On:	05/19/2014
 
 //2D Header
 #include <msl/2d.hpp>
@@ -136,6 +136,8 @@ void draw()
 	static msl::sprite spr_led("images/led.png");
 	static msl::sprite spr_low_battery("images/battery.png");
 	static msl::sprite spr_bad_motor("images/engine.png");
+
+	//Move Parrot Sprite Origin to Center of Parrot
 	spr_parrot.set_origin(0,-12);
 
 	//Draw Parrot Simulation
