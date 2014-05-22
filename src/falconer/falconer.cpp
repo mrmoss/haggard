@@ -1,6 +1,6 @@
 //Falconer Source
 //	Created By:		Mike Moss
-//	Modified On:	05/18/2014
+//	Modified On:	05/22/2014
 
 //Required Libraries:
 //	avcodec
@@ -121,9 +121,9 @@ ardrone::~ardrone()
 {
 	_control_socket.close();
 	_navdata_socket.close();
-	_video_socket.close();
 
 	#ifdef FALCONER_VIDEO
+		_video_socket.close();
 		delete[] _camera_data;
 		avcodec_close(_av_context);
 		av_free(_av_context);
@@ -140,7 +140,13 @@ ardrone::operator bool() const
 
 bool ardrone::good() const
 {
-	return (control_good()&&navdata_good()&&video_good());
+	bool ret=(control_good()&&navdata_good());
+
+	#ifdef FALCONER_VIDEO
+		ret=(ret&&video_good());
+	#endif
+
+	return ret;
 }
 
 bool ardrone::control_good() const
@@ -161,12 +167,15 @@ bool ardrone::video_good() const
 bool ardrone::connect(unsigned int time_out)
 {
 	//Connect to sockets.
-	if(!good())
-	{
+	if(!_control_socket.good())
 		_control_socket.connect_udp();
+	if(!_navdata_socket.good())
 		_navdata_socket.connect_udp();
-		_video_socket.connect_tcp();
-	}
+
+	#ifdef FALCONER_VIDEO
+		if(!_video_socket.good())
+			_video_socket.connect_tcp();
+	#endif
 
 	//Wait 1 second for the connection to establish...
 	msl::nsleep(1000000000);
@@ -205,26 +214,16 @@ bool ardrone::connect(unsigned int time_out)
 			",\"video:codec_fps\",\"30\"\r";
 		++_count;
 		_control_socket.write(video_codec_speed_command);
-
-		//Create wakeup commands.
-		char redirect_navdata_command[14]={1,0,0,0,0,0,0,0,0,0,0,0,0,0};
-		char video_wakeup_command[1]={1};
-
-		//Try to connect to navdata and video until time out value.
-		unsigned long timer=msl::millis()+time_out;
-
-		while(msl::millis()<timer)
-		{
-			if(_navdata_socket.available()<=0)
-				_navdata_socket.write(redirect_navdata_command,14,200);
-			if(_video_socket.available()<=0)
-				_video_socket.write(video_wakeup_command,1,200);
-			if(_navdata_socket.available()>0&&_video_socket.available()>0)
-				return true;
-		}
 	}
 
 	return false;
+}
+
+void ardrone::close()
+{
+	_control_socket.close();
+	_navdata_socket.close();
+	_video_socket.close();
 }
 
 void ardrone::navdata_update()

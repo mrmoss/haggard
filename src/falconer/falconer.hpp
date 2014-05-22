@@ -1,6 +1,6 @@
 //Falconer Header
 //	Created By:		Mike Moss
-//	Modified On:	05/18/2014
+//	Modified On:	05/22/2014
 
 //Required Libraries:
 //	avcodec
@@ -37,6 +37,7 @@ class ardrone
 
 		//In milliseconds.
 		bool connect(unsigned int time_out=1000);
+		void close();
 
 		void navdata_update();
 		void video_update();
