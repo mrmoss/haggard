@@ -30,7 +30,7 @@ bullseye_keeper::bullseye_keeper(const int camera,const int width,const int heig
 
 	vec3 view(xFOV,yFOV,0.0); // camera's world-coordinates visible region
 	vec3 offset(-xFOV/2.0,-yFOV/2.0,0); // manual fudge factor (centimeters)
-	// camcoords=cyberalaska::coords(-0.5*view+offset,view); // 0,0 in center
+
 	camcoords=cyberalaska::coords(offset,view); // 0,0 in bottom left corner
 
 }

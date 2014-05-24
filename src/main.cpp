@@ -24,7 +24,6 @@
 ardrone a;
 bool auto_pilot=false;
 parrot_simulation parrot_sim;
-bool pos_lock=false;
 bullseye_keeper eye(0);
 
 //Main
@@ -138,11 +137,9 @@ void loop(const double dt)
 
 	//Camera Update
 	std::vector<vec3> bulls=eye.update();
-	pos_lock=false;
 
 	if(bulls.size()>0)
 	{
-		pos_lock=true;
 		parrot_sim.x=bulls[0].x;
 		parrot_sim.y=bulls[0].y;
 		parrot_sim.dir=bulls[0].z*180.0/M_PI-90;
@@ -163,8 +160,14 @@ void draw()
 	spr_parrot.set_origin(0,-24);
 
 	//Draw Parrot Simulation
-	if(pos_lock)
-		parrot_sim.draw(spr_parrot,spr_prop,spr_low_battery,spr_bad_motor,spr_led,0.25);
+	parrot_sim.draw(spr_parrot,spr_prop,spr_low_battery,spr_bad_motor,spr_led,0.25);
 
-	std::cout<<"("<<parrot_sim.x<<","<<parrot_sim.y<<")"<<std::endl;
+	double two_feet_in_cm=60.96;
+
+	for(double xx=0;xx<=5;++xx)
+		for(double yy=0;yy<=5;++yy)
+			msl::draw_rectangle_center(
+				-two_feet_in_cm*5/2.0+xx*two_feet_in_cm,
+				-two_feet_in_cm*5/2.0+yy*two_feet_in_cm,
+				two_feet_in_cm,two_feet_in_cm,false,msl::color(0,1,0,1));
 }

@@ -2,7 +2,7 @@
 
 #Housework
 	#Get OS
-	OS='uname -s'
+	OS=$( uname -s )
 
 #Compiler
 	COMPILER="g++"
