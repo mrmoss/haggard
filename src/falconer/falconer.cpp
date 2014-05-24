@@ -214,6 +214,8 @@ bool ardrone::connect(unsigned int time_out)
 			",\"video:codec_fps\",\"30\"\r";
 		++_count;
 		_control_socket.write(video_codec_speed_command);
+
+		return true;
 	}
 
 	return false;
