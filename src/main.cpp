@@ -5,6 +5,9 @@
 //2D Header
 #include <msl/2d.hpp>
 
+//Bullseye Keeper Header
+#include <cyberalaska/bullseye_keeper.hpp>
+
 //Falconer Header
 #include <falconer/falconer.hpp>
 
@@ -14,10 +17,15 @@
 //Parrot Simulation Header
 #include "parrot_simulation.hpp"
 
+//Vector Header
+#include <vector>
+
 //Global Variables
 ardrone a;
 bool auto_pilot=false;
 parrot_simulation parrot_sim;
+bool pos_lock=false;
+bullseye_keeper eye(0);
 
 //Main
 int main()
@@ -54,6 +62,9 @@ void setup()
 		std::cout<<":("<<std::endl;
 		exit(0);
 	}
+
+	//Setup Camera
+	eye=bullseye_keeper(1,640,480);
 }
 
 //Loop (Happens as fast as possible.)
@@ -120,11 +131,22 @@ void loop(const double dt)
 	parrot_sim.low_battery=a.low_battery();
 	parrot_sim.bad_motor=!a.motors_good();
 	parrot_sim.battery=a.battery_percent();
-	parrot_sim.dir=-a.yaw();
 	parrot_sim.loop(dt);
 
 	//Maneuver Parrot
 	a.manuever(altitude,pitch,roll,yaw);
+
+	//Camera Update
+	std::vector<vec3> bulls=eye.update();
+	pos_lock=false;
+
+	if(bulls.size()>0)
+	{
+		pos_lock=true;
+		parrot_sim.x=bulls[0].x;
+		parrot_sim.y=bulls[0].y;
+		parrot_sim.dir=bulls[0].z*180.0/M_PI-90;
+	}
 }
 
 //Draw (Happens as fast as possible.)
@@ -138,8 +160,11 @@ void draw()
 	static msl::sprite spr_bad_motor("images/engine.png");
 
 	//Move Parrot Sprite Origin to Center of Parrot
-	spr_parrot.set_origin(0,-12);
+	spr_parrot.set_origin(0,-24);
 
 	//Draw Parrot Simulation
-	parrot_sim.draw(spr_parrot,spr_prop,spr_low_battery,spr_bad_motor,spr_led,0.5);
+	if(pos_lock)
+		parrot_sim.draw(spr_parrot,spr_prop,spr_low_battery,spr_bad_motor,spr_led,0.25);
+
+	std::cout<<"("<<parrot_sim.x<<","<<parrot_sim.y<<")"<<std::endl;
 }

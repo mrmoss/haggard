@@ -1,6 +1,6 @@
 //2D Sprite Source
 //	Created By:		Mike Moss
-//	Modified On:	03/12/2013
+//	Modified On:	05/24/2014
 
 //Required Libraries:
 //	gl
@@ -163,7 +163,7 @@ void msl::sprite::draw(const double x,const double y,const double rotation,const
 	glPushMatrix();
 		glTranslated(x,y,0);
 		glRotated(rotation_limited+180,0,0,1);
-		glTranslated(_origin_x,_origin_y,0);
+		glTranslated(_origin_x*scale_x,_origin_y*scale_y,0);
 		glBegin(GL_QUADS);
 			glColor4d(color.r,color.g,color.b,color.a);
 			glTexCoord2d(frame_to_draw_begin+0.001,0.999);

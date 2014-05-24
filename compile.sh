@@ -8,6 +8,10 @@
 	COMPILER="g++"
 
 #Sources
+	#Cyberalaska
+	CYBERALASKA_DIR="src/cyberalaska"
+	CYBERALASKA="${CYBERALASKA_DIR}/bullcolor.cpp ${CYBERALASKA_DIR}/bullseye_keeper.cpp"
+
 	#Falconer
 	FALCONER_DIR="src/falconer"
 	FALCONER="${FALCONER_DIR}/falconer.cpp"
@@ -23,12 +27,16 @@
 		${MSL_DIR}/sprite.cpp ${MSL_DIR}/string_util.cpp \
 		${MSL_DIR}/time_util.cpp"
 
+	#RasterCV
+	RASTERCV_DIR="src/rasterCV"
+	RASTERCV="${RASTERCV_DIR}/bullseye.cpp"
+
 	#SOIL
 	SOIL_DIR="src/SOIL"
 	SOIL="${SOIL_DIR}/stb_image_aug.c ${SOIL_DIR}/SOIL.c"
 
 	#Full Source
-	SRC="${FALCONER} ${HAGGARD} ${MSL} ${SOIL}"
+	SRC="${CYBERALASKA} ${FALCONER} ${HAGGARD} ${MSL} ${RASTERCV} ${SOIL}"
 
 #Libraries
 	#GL
