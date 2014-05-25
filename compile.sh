@@ -8,6 +8,9 @@
 	COMPILER="g++"
 
 #Sources
+	#AV
+	AV="-lavcodec -lavformat -lavutil -lswscale"
+
 	#Cyberalaska
 	CYBERALASKA_DIR="src/cyberalaska"
 	CYBERALASKA="${CYBERALASKA_DIR}/bullcolor.cpp ${CYBERALASKA_DIR}/bullseye_keeper.cpp"
@@ -36,13 +39,13 @@
 	SOIL="${SOIL_DIR}/stb_image_aug.c ${SOIL_DIR}/SOIL.c"
 
 	#Full Source
-	SRC="${CYBERALASKA} ${FALCONER} ${HAGGARD} ${MSL} ${RASTERCV} ${SOIL}"
+	SRC="${AV} ${CYBERALASKA} ${FALCONER} ${HAGGARD} ${MSL} ${RASTERCV} ${SOIL}"
 
 #Libraries
 	#GL
 	if [ "${OS}" == "Darwin" ]
 	then
-		OS_GL="-framework OpenGL -framework Glew -framework GLUT"
+		OS_GL="-framework OpenGL -lGLEW -framework GLUT"
 	else
 		OS_GL="-lGL -lglut -lGLEW"
 	fi
@@ -60,10 +63,10 @@
 	BIN="-o haggard"
 
 #Compiler Flags
-	CFLAGS="-O -Wall"
+	CFLAGS="-O -Wall -Wno-deprecated-declarations"
 
 #Search Directories
-	DIRS="-I./src -I/usr/local/include -L/usr/local/lib -I/usr/include/freetype2"
+	DIRS="-I./src -I/usr/local/include -L/usr/local/lib -I/usr/include/freetype2 -I/usr/local/include/freetype2"
 
 #Compile
 ${COMPILER} ${SRC} ${LIB} ${BIN} ${CFLAGS} ${DIRS}

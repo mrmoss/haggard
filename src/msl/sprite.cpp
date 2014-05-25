@@ -12,6 +12,9 @@
 //Definitions for "sprite.hpp"
 #include "sprite.hpp"
 
+//C Standard Library Header
+#include <cstdlib>
+
 //Exception Header
 #include <stdexcept>
 
@@ -90,7 +93,7 @@ void msl::sprite::open(const std::string& filename,const unsigned int number_of_
 void msl::sprite::release()
 {
 	if(_texture!=0)
-		glDeleteTextures(1,&_texture);
+		glDeleteTextures(1,(GLuint*)&_texture);
 }
 
 //Sprite Class Number of Frames Accessor

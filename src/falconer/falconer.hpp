@@ -13,15 +13,13 @@
 #include "msl/socket.hpp"
 #include <string>
 
-#ifdef FALCONER_VIDEO
-	extern "C"
-	{
-		typedef unsigned long UINT64_C;
-		#include "libavcodec/avcodec.h"
-		#include "libswscale/swscale.h"
-		#include "libavutil/mem.h"
-	}
-#endif
+extern "C"
+{
+	typedef unsigned long UINT64_C;
+	#include "libavcodec/avcodec.h"
+	#include "libswscale/swscale.h"
+	#include "libavutil/mem.h"
+}
 
 class ardrone
 {
@@ -98,13 +96,11 @@ class ardrone
 
 		uint8_t* _camera_data;
 
-		#ifdef FALCONER_VIDEO
-			AVPacket _av_packet;
-			AVCodec* _av_codec;
-			AVCodecContext* _av_context;
-			AVFrame* _av_camera_cmyk;
-			AVFrame* _av_camera_rgb;
-		#endif
+		AVPacket _av_packet;
+		AVCodec* _av_codec;
+		AVCodecContext* _av_context;
+		AVFrame* _av_camera_cmyk;
+		AVFrame* _av_camera_rgb;
 };
 
 #endif
