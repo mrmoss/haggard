@@ -24,11 +24,50 @@
 ardrone a;
 bool auto_pilot=false;
 parrot_simulation parrot_sim;
-bullseye_keeper eye(0);
+bullseye_keeper* eye;
 
 //Main
-int main()
+int main(int argc,char* argv[])
 {
+	//Commandline Arguments Vector
+	std::vector<std::string> command_line_args;
+
+	//Convert Char* to Strings
+	for(int ii=1;ii<argc;++ii)
+		command_line_args.push_back(argv[ii]);
+
+	//Parse Command Line Arguments
+	int camera=0;
+	std::string serial_port="/dev/ttyUSB0";
+	unsigned int serial_baud=57600;
+
+	for(unsigned int ii=0;ii<command_line_args.size();++ii)
+	{
+		if(msl::starts_with(command_line_args[ii],"--cam")&&ii+1<command_line_args.size())
+		{
+			camera=msl::to_int(command_line_args[ii+1]);
+			++ii;
+		}
+		else if(msl::starts_with(command_line_args[ii],"--serial")&&ii+1<command_line_args.size())
+		{
+			serial_port=command_line_args[ii+1];
+			++ii;
+		}
+		else if(msl::starts_with(command_line_args[ii],"--baud")&&ii+1<command_line_args.size())
+		{
+			serial_baud=msl::to_int(command_line_args[ii+1]);
+			++ii;
+		}
+		else
+		{
+			std::cout<<"Unrecognized command line argument "<<command_line_args[ii]<<"!\n";
+			exit(1);
+		}
+	}
+
+	//Setup Camera
+	eye=new bullseye_keeper(camera,640,480);
+
 	//Start MSL 2D
 	return msl::start_2d("Haggard",640,480);
 }
@@ -61,9 +100,6 @@ void setup()
 		std::cout<<":("<<std::endl;
 		exit(0);
 	}
-
-	//Setup Camera
-	eye=bullseye_keeper(1,640,480);
 }
 
 //Loop (Happens as fast as possible.)
@@ -136,7 +172,7 @@ void loop(const double dt)
 	a.manuever(altitude,pitch,roll,yaw);
 
 	//Camera Update
-	std::vector<vec3> bulls=eye.update();
+	std::vector<vec3> bulls=eye->update();
 
 	if(bulls.size()>0)
 	{
